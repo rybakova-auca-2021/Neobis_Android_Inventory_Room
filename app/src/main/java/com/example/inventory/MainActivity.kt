@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.inventory.databinding.ActivityMainBinding
+import com.example.inventory.fargments.ArchiveFragment
+import com.example.inventory.fargments.MainFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
