@@ -1,4 +1,4 @@
-package com.example.inventory.fargments
+package com.example.inventory.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

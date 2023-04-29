@@ -11,7 +11,6 @@ import com.example.inventory.Product
 import com.example.inventory.R
 import com.example.inventory.database.ProductRepository
 import com.example.inventory.databinding.FragmentMainBinding
-import com.example.inventory.fargments.AddProductFragment
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
@@ -45,7 +44,7 @@ class MainFragment : Fragment() {
                 val fragment = AddProductFragment()
                 fragment.arguments = Bundle().apply { putParcelable("product", data) }
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, fragment)
+                    .replace(R.id.flFragment, fragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -60,7 +59,7 @@ class MainFragment : Fragment() {
         binding.addButtonMain.setOnClickListener {
             val fragment = AddProductFragment()
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, fragment)
+                .replace(R.id.flFragment, fragment)
                 .addToBackStack(null)
                 .commit()
         }

@@ -3,8 +3,9 @@ package com.example.inventory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import com.example.inventory.databinding.ActivityMainBinding
-import com.example.inventory.fargments.ArchiveFragment
+import com.example.inventory.fragments.ArchiveFragment
 import com.example.inventory.fragments.MainFragment
 
 class MainActivity : AppCompatActivity() {
