@@ -7,18 +7,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.inventory.Product
+import com.example.inventory.R
 import com.example.inventory.database.ProductRepository
 import com.example.inventory.databinding.FragmentAddProductBinding
 
 class AddProductFragment : Fragment() {
+
     private lateinit var binding: FragmentAddProductBinding
     private var product: Product? = null
     private val PICK_IMAGE_REQUEST = 1
     private var selectedImageUri: Uri? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,7 +35,15 @@ class AddProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.imageView2.setOnClickListener {
+        binding.backButton.setOnClickListener {
+            val fragment = MainFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.flFragment, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.imageHolder.setOnClickListener {
             chooseImage()
         }
         product?.let {
@@ -80,7 +93,7 @@ class AddProductFragment : Fragment() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.data != null) {
             selectedImageUri = data.data
-            Glide.with(this).load(selectedImageUri).into(binding.imageView2)
+            Glide.with(this).load(selectedImageUri).into(binding.imageView3)
         }
     }
 }

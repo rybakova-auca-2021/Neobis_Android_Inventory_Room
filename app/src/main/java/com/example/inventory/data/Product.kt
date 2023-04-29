@@ -14,8 +14,8 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "products")
 @Parcelize
 data class Product(
-
     @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
     var image: String,
     val name: String,
     val price: String,
