@@ -1,5 +1,3 @@
-package com.example.inventory.adapter
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,11 +5,15 @@ import com.bumptech.glide.Glide
 import com.example.inventory.Product
 import com.example.inventory.databinding.CardBinding
 
+class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
-class RecyclerViewAdapter(
-    private val products: List<Product>,
-    private val onItemClickListener: (Product) -> Unit
-) : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
+    private var products: List<Product> = emptyList()
+    var onClickListener: ListClickListener<Product>? = null
+
+    fun setProduct(products: List<Product>) {
+        this.products = products
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,9 +24,23 @@ class RecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val product = products[position]
         holder.bind(product)
+        holder.itemView.setOnClickListener {
+            onClickListener?.onClick(product, position)
+        }
     }
 
-    inner class ViewHolder(val binding: CardBinding) :
+    override fun getItemCount() = products.size
+
+    fun setOnItemClick(listClickListener: ListClickListener<Product>) {
+        this.onClickListener = listClickListener
+    }
+
+    interface ListClickListener<T> {
+        fun onClick(data: T, position: Int)
+        fun onDelete(product: T)
+    }
+
+    inner class ViewHolder(private val binding: CardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
@@ -37,6 +53,4 @@ class RecyclerViewAdapter(
             }
         }
     }
-
-    override fun getItemCount() = products.size
 }

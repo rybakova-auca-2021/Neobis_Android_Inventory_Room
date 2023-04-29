@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.inventory.databinding.ActivityMainBinding
 import com.example.inventory.fargments.ArchiveFragment
-import com.example.inventory.fargments.MainFragment
+import com.example.inventory.fragments.MainFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-
     private fun setCurrentFragment(fragment: Fragment)=
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)

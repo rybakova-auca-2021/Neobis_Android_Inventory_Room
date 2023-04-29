@@ -1,26 +1,29 @@
 package com.example.inventory
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.room.Database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.inventory.database.ProductDao
+import com.example.inventory.fragments.MainFragment
+import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "products")
-data class Product (
+@Parcelize
+data class Product(
 
     @PrimaryKey(autoGenerate = true)
-    val image: String,
+    var image: String,
     val name: String,
-    val price: Double,
+    val price: String,
     val manufacturer: String,
-    val quantity: Int,
-    val archived: Boolean
-)
+    val quantity: String,
+) : Parcelable
 
-@Database(entities = [Product::class], version = 1)
+@Database(entities = [Product::class], version = 1, exportSchema = false)
 abstract class ProductDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
@@ -30,15 +33,19 @@ abstract class ProductDatabase : RoomDatabase() {
         @Volatile
         private var instance: ProductDatabase? = null
 
-        fun getInstance(context: Context): ProductDatabase {
-            return instance ?: synchronized(this) {
-                instance ?: buildDatabase(context).also { instance = it }
+        fun getInstance(context: Context): ProductDatabase? {
+            if (instance == null) {
+                synchronized(ProductDatabase::class) {
+                    instance = Room.databaseBuilder(context.applicationContext,
+                        ProductDatabase::class.java, "user.db").allowMainThreadQueries()
+                        .build()
+                }
             }
+            return instance
         }
 
-        private fun buildDatabase(context: Context): ProductDatabase {
-            return Room.databaseBuilder(context, ProductDatabase::class.java, DATABASE_NAME)
-                .build()
+        fun destroyInstance() {
+            instance = null
         }
     }
 }
