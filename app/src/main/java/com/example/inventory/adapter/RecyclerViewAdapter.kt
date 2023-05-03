@@ -9,7 +9,7 @@ import com.example.inventory.databinding.CardBinding
 
 class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
-    private var products: List<Product> = emptyList()
+    private var products: ArrayList<Product> = arrayListOf()
     var onClickListener: ListClickListener<Product>? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -25,14 +25,15 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
         }
     }
 
-    override fun getItemCount() = products.size
+    override fun getItemCount() = products.count()
 
     fun setOnItemClick(listClickListener: ListClickListener<Product>) {
         this.onClickListener = listClickListener
     }
     @SuppressLint("NotifyDataSetChanged")
     fun updateProduct(newList: List<Product>) {
-        products = newList
+        products.clear()
+        products.addAll(newList)
         notifyDataSetChanged()
     }
     inner class ViewHolder(private val binding: CardBinding) :

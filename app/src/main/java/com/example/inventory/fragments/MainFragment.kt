@@ -2,6 +2,7 @@ package com.example.inventory.fragments
 
 import RecyclerViewAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +41,7 @@ class MainFragment : Fragment(), Presenter.ProductView {
     }
 
     private fun setupRecyclerView() {
-        binding.rvMain.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvMain.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
         binding.rvMain.adapter = adapter
         adapter.setOnItemClick(object : RecyclerViewAdapter.ListClickListener<Product> {
             override fun onClick(data: Product, position: Int) {
@@ -71,6 +72,7 @@ class MainFragment : Fragment(), Presenter.ProductView {
         presenter.detachView()
     }
     override fun showAllProducts(products: List<Product>) {
+        Log.e("Test", "showAllProductsFragment")
         adapter.updateProduct(products)
     }
 }
