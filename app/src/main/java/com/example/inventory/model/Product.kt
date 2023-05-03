@@ -1,17 +1,16 @@
-package com.example.inventory
+package com.example.inventory.model
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Parcelable
-import androidx.room.Database
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.example.inventory.database.ProductDao
-import com.example.inventory.fragments.MainFragment
 import kotlinx.parcelize.Parcelize
+import java.io.ByteArrayOutputStream
 
 @Entity(tableName = "products")
+@TypeConverters(BitMapTypeConverter::class)
 @Parcelize
 data class Product(
     @PrimaryKey(autoGenerate = true)
@@ -20,8 +19,29 @@ data class Product(
     val name: String,
     val price: String,
     val manufacturer: String,
-    val quantity: String,
+    val quantity: String
 ) : Parcelable
+
+class BitMapTypeConverter {
+    @TypeConverter
+    fun fromByteArray(bytes: ByteArray?): Bitmap? {
+        return if (bytes == null) {
+            null
+        } else {
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        }
+    }
+    @TypeConverter
+    fun toByteArray(bitmap: Bitmap?): ByteArray? {
+        return if (bitmap == null) {
+            null
+        } else {
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            stream.toByteArray()
+        }
+    }
+}
 
 @Database(entities = [Product::class], version = 1, exportSchema = false)
 abstract class ProductDatabase : RoomDatabase() {

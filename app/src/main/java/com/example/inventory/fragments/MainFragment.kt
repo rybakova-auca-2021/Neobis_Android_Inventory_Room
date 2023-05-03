@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.inventory.Product
+import com.example.inventory.model.Product
 import com.example.inventory.R
-import com.example.inventory.database.ProductRepository
 import com.example.inventory.databinding.FragmentMainBinding
+import com.example.inventory.presenter.Presenter
+import com.example.inventory.presenter.PresenterClass
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), Presenter.ProductView {
     private lateinit var binding: FragmentMainBinding
     private val adapter by lazy { RecyclerViewAdapter() }
-    private val repo by lazy { ProductRepository(requireContext()) }
+    private lateinit var presenter: PresenterClass
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,11 +30,13 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupAddButton()
+        getProduct()
     }
 
-    override fun onResume() {
-        super.onResume()
-        fetchProducts()
+    private fun getProduct() {
+        presenter = PresenterClass(requireContext())
+        presenter.attachView(this)
+        presenter.getAllProducts()
     }
 
     private fun setupRecyclerView() {
@@ -48,11 +51,6 @@ class MainFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
-
-            override fun onDelete(product: Product) {
-                repo.deleteProduct(product)
-                fetchProducts()
-            }
         })
     }
     private fun setupAddButton() {
@@ -64,8 +62,15 @@ class MainFragment : Fragment() {
                 .commit()
         }
     }
-    private fun fetchProducts() {
-        val products = repo.getAllProducts()
-        adapter.setProduct(products)
+    override fun onResume() {
+        super.onResume()
+        presenter.getAllProducts()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
+    }
+    override fun showAllProducts(products: List<Product>) {
+        adapter.updateProduct(products)
     }
 }

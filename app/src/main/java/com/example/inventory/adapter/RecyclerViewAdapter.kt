@@ -1,20 +1,16 @@
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.inventory.Product
+import com.example.inventory.model.Product
 import com.example.inventory.databinding.CardBinding
 
 class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     private var products: List<Product> = emptyList()
     var onClickListener: ListClickListener<Product>? = null
-
-    fun setProduct(products: List<Product>) {
-        this.products = products
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CardBinding.inflate(inflater, parent, false)
@@ -34,12 +30,11 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
     fun setOnItemClick(listClickListener: ListClickListener<Product>) {
         this.onClickListener = listClickListener
     }
-
-    interface ListClickListener<T> {
-        fun onClick(data: T, position: Int)
-        fun onDelete(product: T)
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateProduct(newList: List<Product>) {
+        products = newList
+        notifyDataSetChanged()
     }
-
     inner class ViewHolder(private val binding: CardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -47,10 +42,13 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
             with(binding) {
                 Glide.with(image).load(product.image).into(image)
                 title.text = product.name
-                price.text = product.price.toString()
+                price.text = product.price
                 manufacturer.text = product.manufacturer
-                quantity.text = product.quantity.toString()
+                quantity.text = product.quantity
             }
         }
+    }
+    interface ListClickListener<T> {
+        fun onClick(data: T, position: Int)
     }
 }
