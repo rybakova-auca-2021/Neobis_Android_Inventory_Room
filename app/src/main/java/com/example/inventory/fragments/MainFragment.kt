@@ -1,11 +1,13 @@
 package com.example.inventory.fragments
 
 import RecyclerViewAdapter
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.inventory.model.Product
@@ -45,8 +47,8 @@ class MainFragment : Fragment(), Presenter.ProductView {
         binding.rvMain.adapter = adapter
         adapter.setOnItemClick(object : RecyclerViewAdapter.ListClickListener<Product> {
             override fun onClick(data: Product, position: Int) {
-                val fragment = AddProductFragment()
-                fragment.arguments = Bundle().apply { putParcelable("product", data) }
+                val fragment = DetailFragment()
+                fragment.arguments = Bundle().apply { putParcelable("products", data) }
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.flFragment, fragment)
                     .addToBackStack(null)
@@ -71,6 +73,7 @@ class MainFragment : Fragment(), Presenter.ProductView {
         super.onDestroy()
         presenter.detachView()
     }
+    @SuppressLint("NotifyDataSetChanged")
     override fun showAllProducts(products: List<Product>) {
         Log.e("Test", "showAllProductsFragment")
         adapter.updateProduct(products)

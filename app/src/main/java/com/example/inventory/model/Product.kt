@@ -16,10 +16,10 @@ data class Product(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
     var image: String,
-    val name: String,
-    val price: String,
-    val manufacturer: String,
-    val quantity: String
+    var name: String,
+    var price: String,
+    var manufacturer: String,
+    var quantity: String
 ) : Parcelable
 
 class BitMapTypeConverter {

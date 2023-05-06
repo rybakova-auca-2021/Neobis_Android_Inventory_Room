@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.inventory.model.Product
@@ -67,10 +66,10 @@ class AddProductFragment : Fragment(), Presenter.ProductView {
             ) {
                 val product = Product(
                     image = selectedImageUri.toString(),
-                    name = binding.name.toString(),
-                    price = binding.price.toString(),
-                    manufacturer = binding.manufacturer.toString(),
-                    quantity = binding.quantity.toString()
+                    name = binding.inputName.text.toString(),
+                    price = binding.inputPrice.text.toString(),
+                    manufacturer = binding.inputManufacturer.text.toString(),
+                    quantity = binding.inputQuantity.text.toString()
                 )
                 presenter.addProduct(product)
                 Toast.makeText(requireContext(), "Product is added", Toast.LENGTH_SHORT).show()
