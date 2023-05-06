@@ -7,5 +7,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:alertDialogTheme">@style/LightDialogTheme</item>
+        <item name="alertDialogTheme">@style/LightDialogTheme</item>
     </style>
+
+    <style name="LightDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
 </resources>

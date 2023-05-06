@@ -1,4 +1,3 @@
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -48,12 +47,17 @@ class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>
                 price.text = product.price
                 manufacturer.text = product.manufacturer
                 quantity.text = product.quantity
+
+                binding.threeDots.setOnClickListener {
+                    onClickListener?.onThreeDotsClick(product, adapterPosition)
+                }
             }
         }
     }
 
     interface ListClickListener<T> {
         fun onClick(data: T, position: Int)
+        fun onThreeDotsClick(data: T, position: Int)
     }
 
     class ProductDiffCallback(

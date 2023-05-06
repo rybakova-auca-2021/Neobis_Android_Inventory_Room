@@ -1,5 +1,6 @@
 package com.example.inventory.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -10,9 +11,16 @@ import com.example.inventory.model.Product
 
 @Dao
 interface ProductDao {
+//    @Query("SELECT * FROM products WHERE archived=0")
+//    fun getAllProducts(): List<Product>
+//
+//    @Query("SELECT * FROM products WHERE archived=1")
+//    fun getAllArchived(): List<Product>
     @Query("SELECT * FROM products")
     fun getAllProducts(): List<Product>
 
+    @Query("SELECT * FROM products")
+    fun getAllArchived(): List<Product>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(product: Product)
 

@@ -1,28 +1,29 @@
 package com.example.inventory.fragments
 
-import RecyclerViewAdapter
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 import com.example.inventory.R
 import com.example.inventory.model.Product
 import com.example.inventory.databinding.FragmentDetailOfProductBinding
 import com.example.inventory.presenter.Presenter
-import com.example.inventory.presenter.PresenterClass
+import com.example.inventory.presenter.PresenterClassMain
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DetailFragment : Fragment(), Presenter.ProductView {
     private lateinit var binding: FragmentDetailOfProductBinding
-    private lateinit var presenter: PresenterClass
+    private lateinit var presenter: PresenterClassMain
     private var selectedImageUri: Uri? = null
     private var PICK_IMAGE_REQUEST = 1
     private lateinit var product: Product
@@ -72,14 +73,14 @@ class DetailFragment : Fragment(), Presenter.ProductView {
         binding.imageHolder.setOnClickListener {
             chooseImage()
         }
-        editProduct()
+        showDialog()
     }
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.detachView()
     }
     private fun getProduct() {
-        presenter = PresenterClass(requireContext())
+        presenter = PresenterClassMain(requireContext())
         presenter.attachView(this)
     }
 
@@ -92,24 +93,21 @@ class DetailFragment : Fragment(), Presenter.ProductView {
             .load(Uri.parse(product.image))
             .into(binding.imageView3)
     }
-    private fun editProduct() {
-        binding.buttonSave.setOnClickListener {
-            if (binding.name.text.isNotEmpty() && binding.price.text.isNotEmpty() &&
-                binding.manufacturer.text.isNotEmpty() && binding.quantity.text.isNotEmpty()
-            ) {
-                val product = Product(
-                    image = selectedImageUri.toString(),
-                    name = binding.inputName.text.toString(),
-                    price = binding.inputPrice.text.toString(),
-                    manufacturer = binding.inputManufacturer.text.toString(),
-                    quantity = binding.inputQuantity.text.toString()
-                )
-                presenter.updateProduct(product)
-                Toast.makeText(requireContext(), "Product is edited", Toast.LENGTH_SHORT).show()
-                requireActivity().supportFragmentManager.popBackStack()
-            } else {
-                Toast.makeText(requireContext(), "Invalid input", Toast.LENGTH_SHORT).show()
-            }
+    private fun editProduct(id:Int) {
+        if (binding.name.text.isNotEmpty() && binding.price.text.isNotEmpty() &&
+            binding.manufacturer.text.isNotEmpty() && binding.quantity.text.isNotEmpty()
+        ) {
+            val image = selectedImageUri.toString()
+            val name = binding.inputName.text.toString()
+            val price = binding.inputPrice.text.toString()
+            val manufacturer = binding.inputManufacturer.text.toString()
+            val quantity = binding.inputQuantity.text.toString()
+            val product = Product(id, image, name, price, manufacturer, quantity)
+            presenter.updateProduct(product)
+            Toast.makeText(requireContext(), "Product is edited", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
+        } else {
+            Toast.makeText(requireContext(), "Invalid input", Toast.LENGTH_SHORT).show()
         }
     }
     private fun chooseImage() {
@@ -127,5 +125,23 @@ class DetailFragment : Fragment(), Presenter.ProductView {
         }
     }
     override fun showAllProducts(products: List<Product>) {
+    }
+    @SuppressLint("MissingInflatedId")
+    private fun showDialog() {
+        binding.buttonSave.setOnClickListener {
+            val dialog = AlertDialog.Builder(requireContext(), R.style.LightDialogTheme)
+            dialog.apply {
+                setTitle("Сохранить изменения?")
+                setPositiveButton("Yes") { _, _ ->
+                    product.id?.let { it1 -> editProduct(it1) }
+                    Toast.makeText(requireActivity(), "Изменения сохранены!", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                setNegativeButton("No") { _, _ ->
+                    Toast.makeText(requireActivity(), "Отменено", Toast.LENGTH_SHORT).show()
+                }
+            }.create()
+            dialog.show()
+        }
     }
 }

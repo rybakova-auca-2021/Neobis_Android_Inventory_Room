@@ -19,7 +19,8 @@ data class Product(
     var name: String,
     var price: String,
     var manufacturer: String,
-    var quantity: String
+    var quantity: String,
+//    var archived: Int
 ) : Parcelable
 
 class BitMapTypeConverter {

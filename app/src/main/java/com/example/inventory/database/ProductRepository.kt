@@ -1,5 +1,6 @@
 package com.example.inventory.database
 
+import androidx.lifecycle.LiveData
 import com.example.inventory.model.Product
 
 class ProductRepository(private val ProductDao: ProductDao) {
@@ -8,7 +9,9 @@ class ProductRepository(private val ProductDao: ProductDao) {
     fun getAllProducts(): List<Product> {
         return ProductDao.getAllProducts()
     }
-
+    fun getAllArchived(): List<Product> {
+        return ProductDao.getAllArchived()
+    }
     // Insert new product
     fun insertProduct(product: Product) {
         return ProductDao.insertProduct(product)

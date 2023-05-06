@@ -7,7 +7,7 @@ import com.example.inventory.model.ProductDatabase
 import com.example.inventory.database.ProductRepository
 import kotlinx.coroutines.*
 
-class PresenterClass(context: Context) : Presenter.PresenterTwo{
+class PresenterClassMain(context: Context) : Presenter.PresenterMain{
     private var view: Presenter.ProductView? = null
     private val repository: ProductRepository
     private val exceptionHandler = CoroutineExceptionHandler{_ , T ->
@@ -27,14 +27,15 @@ class PresenterClass(context: Context) : Presenter.PresenterTwo{
         Log.e("Test", "getAllProducts")
         CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val product = repository.getAllProducts()
-            Log.e("Test", product.size.toString())
             withContext(Dispatchers.Main) {
                 view?.showAllProducts(product)
             }
         }
     }
     override fun deleteProduct(product: Product) {
-        return repository.deleteProduct(product)
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.deleteProduct(product)
+        }
     }
 
     override fun updateProduct(product: Product) {
