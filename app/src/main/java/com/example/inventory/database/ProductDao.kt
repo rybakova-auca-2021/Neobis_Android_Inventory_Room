@@ -11,15 +11,10 @@ import com.example.inventory.model.Product
 
 @Dao
 interface ProductDao {
-//    @Query("SELECT * FROM products WHERE archived=0")
-//    fun getAllProducts(): List<Product>
-//
-//    @Query("SELECT * FROM products WHERE archived=1")
-//    fun getAllArchived(): List<Product>
-    @Query("SELECT * FROM products")
+    @Query("SELECT * FROM products WHERE archived=0")
     fun getAllProducts(): List<Product>
 
-    @Query("SELECT * FROM products")
+    @Query("SELECT * FROM products WHERE archived=1")
     fun getAllArchived(): List<Product>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertProduct(product: Product)

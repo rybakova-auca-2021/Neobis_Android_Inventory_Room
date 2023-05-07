@@ -20,7 +20,7 @@ data class Product(
     var price: String,
     var manufacturer: String,
     var quantity: String,
-//    var archived: Int
+    var archived: Int
 ) : Parcelable
 
 class BitMapTypeConverter {
@@ -57,8 +57,12 @@ abstract class ProductDatabase : RoomDatabase() {
         fun getInstance(context: Context): ProductDatabase? {
             if (instance == null) {
                 synchronized(ProductDatabase::class) {
-                    instance = Room.databaseBuilder(context.applicationContext,
-                        ProductDatabase::class.java, "user.db").allowMainThreadQueries()
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        ProductDatabase::class.java,
+                        DATABASE_NAME
+                    )
+                        .allowMainThreadQueries()
                         .build()
                 }
             }

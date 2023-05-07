@@ -22,7 +22,6 @@ class MainFragment : Fragment(), Presenter.ProductView {
     private lateinit var binding: FragmentMainBinding
     private val adapter by lazy { RecyclerViewAdapter() }
     private lateinit var presenter: PresenterClassMain
-    private lateinit var product: Product
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,8 +34,10 @@ class MainFragment : Fragment(), Presenter.ProductView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
+        binding.rvMain.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        binding.rvMain.adapter = adapter
         getProduct()
+        setupRecyclerView()
         setupAddButton()
     }
 
@@ -46,8 +47,6 @@ class MainFragment : Fragment(), Presenter.ProductView {
     }
 
     private fun setupRecyclerView() {
-        binding.rvMain.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
-        binding.rvMain.adapter = adapter
         adapter.setOnItemClick(object : RecyclerViewAdapter.ListClickListener<Product> {
             override fun onClick(data: Product, position: Int) {
                 val fragment = DetailFragment()
@@ -59,7 +58,27 @@ class MainFragment : Fragment(), Presenter.ProductView {
             }
 
             override fun onThreeDotsClick(data: Product, position: Int) {
-                openBottomDialog()
+                val dialog = BottomSheetDialog(requireContext())
+                val view = layoutInflater.inflate(R.layout.main_bottom_sheet, null)
+                dialog.setCancelable(true)
+                dialog.setContentView(view)
+
+                val archiveTextView = view.findViewById<TextView>(R.id.archiveButton)
+                archiveTextView.setOnClickListener {
+                    val startDialogFragment = AlertDialog.Builder(requireContext(), R.style.LightDialogTheme)
+                    startDialogFragment.apply {
+                        setTitle("Архивировать из каталога?")
+                        setPositiveButton("Yes") { _, _ ->
+                            archiveProduct(data)
+                            dialog.dismiss()
+                        }
+                        setNegativeButton("No") { _, _ ->
+                            dialog.dismiss()
+                        }
+                    }.create()
+                    startDialogFragment.show()
+                }
+                dialog.show()
             }
         })
     }
@@ -86,30 +105,7 @@ class MainFragment : Fragment(), Presenter.ProductView {
         adapter.updateProduct(products)
     }
     fun archiveProduct(product: Product){
-        this.product = Product(product.id, product.name, product.price, product.manufacturer, product.quantity, product.image)
-        presenter.updateProduct(product)
-    }
-    private fun openBottomDialog() {
-            val dialog = BottomSheetDialog(requireContext())
-            val view = layoutInflater.inflate(R.layout.main_bottom_sheet, null)
-            dialog.setCancelable(true)
-            dialog.setContentView(view)
-
-            val archiveTextView = view.findViewById<TextView>(R.id.archiveButton)
-            archiveTextView.setOnClickListener {
-                val startDialogFragment = AlertDialog.Builder(requireContext(), R.style.LightDialogTheme)
-                startDialogFragment.apply {
-                    setTitle("Архивировать из каталога?")
-                    setPositiveButton("Yes") { _, _ ->
-                        archiveProduct(product)
-                        dialog.dismiss()
-                    }
-                    setNegativeButton("No") { _, _ ->
-                        dialog.dismiss()
-                    }
-                }.create()
-                startDialogFragment.show()
-            }
-        dialog.show()
+        val archivedProduct = Product(product.id, product.image, product.name, product.price, product.manufacturer, product.quantity, 1)
+        presenter.updateProduct(archivedProduct)
     }
 }

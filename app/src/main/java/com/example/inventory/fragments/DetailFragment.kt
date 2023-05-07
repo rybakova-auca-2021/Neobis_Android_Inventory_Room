@@ -9,17 +9,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 import com.example.inventory.R
 import com.example.inventory.model.Product
 import com.example.inventory.databinding.FragmentDetailOfProductBinding
 import com.example.inventory.presenter.Presenter
 import com.example.inventory.presenter.PresenterClassMain
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DetailFragment : Fragment(), Presenter.ProductView {
     private lateinit var binding: FragmentDetailOfProductBinding
@@ -29,7 +27,7 @@ class DetailFragment : Fragment(), Presenter.ProductView {
     private lateinit var product: Product
 
     companion object {
-        private const val ARG_PRODUCT = "products"
+        const val ARG_PRODUCT = "products"
         fun newInstance(product: Product): DetailFragment {
             val args = Bundle()
             args.putParcelable(ARG_PRODUCT, product)
@@ -102,7 +100,7 @@ class DetailFragment : Fragment(), Presenter.ProductView {
             val price = binding.inputPrice.text.toString()
             val manufacturer = binding.inputManufacturer.text.toString()
             val quantity = binding.inputQuantity.text.toString()
-            val product = Product(id, image, name, price, manufacturer, quantity)
+            val product = Product(id, image, name, price, manufacturer, quantity, 0)
             presenter.updateProduct(product)
             Toast.makeText(requireContext(), "Product is edited", Toast.LENGTH_SHORT).show()
             requireActivity().supportFragmentManager.popBackStack()
