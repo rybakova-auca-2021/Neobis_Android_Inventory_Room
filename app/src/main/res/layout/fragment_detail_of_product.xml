@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="19dp"
+            android:fontFamily="@font/roboto_medium"
             android:text="Детали о товаре"
             android:textColor="@color/main"
             android:textSize="28sp"
@@ -45,7 +46,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:background="#F6F7F7"
+        android:backgroundTint="#F6F7F7"
         app:cardCornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +95,8 @@
             android:hint="Впишите название товара"
             android:textColorHint="#C7CBCB"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:background="@android:color/transparent"/>
 
     </androidx.cardview.widget.CardView>
 
@@ -130,6 +132,7 @@
             android:textColorHint="#C7CBCB"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:background="@android:color/transparent"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.cardview.widget.CardView>
@@ -166,6 +169,7 @@
             android:textColorHint="#C7CBCB"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:background="@android:color/transparent"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.cardview.widget.CardView>
@@ -202,6 +206,7 @@
             android:textColorHint="#C7CBCB"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:background="@android:color/transparent"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </androidx.cardview.widget.CardView>
@@ -210,25 +215,22 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/open_sans_bold"
         android:text="Отмена"
         android:textColor="#2A8CFF"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/quantityOfProduct"
         app:layout_constraintTop_toBottomOf="@+id/quantityOfProduct" />
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginEnd="40dp"
+        android:backgroundTint="#2A8CFF"
+        android:fontFamily="@font/open_sans_semibold"
         android:text="Сохранить"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/quantityOfProduct"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/buttonCancel"
         app:layout_constraintTop_toTopOf="@+id/buttonCancel"
-        android:backgroundTint="#2A8CFF"
         tools:ignore="TextContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

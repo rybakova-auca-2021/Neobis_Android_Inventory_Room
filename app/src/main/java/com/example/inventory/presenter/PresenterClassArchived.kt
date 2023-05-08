@@ -15,11 +15,11 @@ class PresenterClassArchived(context: Context) : Presenter.PresenterArchive{
     }
 
     override fun getAllArchived() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val product = repository.getAllArchived()
-            withContext(Dispatchers.Main) {
-                viewArchived?.showAllArchived(product)
+        CoroutineScope(Dispatchers.Main).launch {
+            val product = withContext(Dispatchers.IO) {
+                repository.getAllArchived()
             }
+            viewArchived?.showAllArchived(product)
         }
     }
 
