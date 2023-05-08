@@ -31,10 +31,6 @@ class ArchiveFragment : Fragment(), Presenter.ArchivedView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        getProduct()
-    }
-
-    private fun getProduct() {
         presenter = PresenterClassArchived(requireContext())
         presenter.attachView(this)
         presenter.getAllArchived()
@@ -43,65 +39,87 @@ class ArchiveFragment : Fragment(), Presenter.ArchivedView {
     private fun setupRecyclerView() {
         binding.recyclerViewArchive.layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
         binding.recyclerViewArchive.adapter = adapter
+        setupClickListeners()
+    }
+
+    private fun setupClickListeners() {
         adapter.setOnItemClick(object : RecyclerViewAdapter.ListClickListener<Product> {
             override fun onClick(data: Product, position: Int) {
-                val fragment = DetailFragment()
-                fragment.arguments = Bundle().apply { putParcelable("products", data) }
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.flFragment, fragment)
-                    .addToBackStack(null)
-                    .commit()
+                navigateToDetailFragment(data)
             }
 
             override fun onThreeDotsClick(data: Product, position: Int) {
-                val dialog = BottomSheetDialog(requireContext())
-                val view = layoutInflater.inflate(R.layout.archive_bottom_sheet, null)
-                dialog.setCancelable(true)
-                dialog.setContentView(view)
-
-                //delete
-                val deleteTextView = view.findViewById<TextView>(R.id.delete)
-                deleteTextView.setOnClickListener {
-                    val startDialogFragment = AlertDialog.Builder(requireContext())
-                    startDialogFragment.apply {
-                        setTitle("Удалить из архива?")
-                        setPositiveButton("Yes") { _, _ ->
-                            presenter.deleteProduct(data)
-                            dialog.dismiss()
-                        }
-                        setNegativeButton("No"){ _, _ ->
-                            dialog.dismiss()
-                        }
-                    }.create()
-                    startDialogFragment.show()
-                }
-                dialog.show()
-                //restore
-                val restoreTextView = view.findViewById<TextView>(R.id.restore)
-                restoreTextView.setOnClickListener {
-                    val startDialogFragment = AlertDialog.Builder(requireContext())
-                    startDialogFragment.apply {
-                        setTitle("Восстановить из архива?")
-                        setPositiveButton("Yes") { _, _ ->
-                            restoreProduct(data)
-                            dialog.dismiss()
-                        }
-                        setNegativeButton("No") { _, _ ->
-                            dialog.dismiss()
-                        }
-                    }.create()
-                    startDialogFragment.show()
-                }
-                dialog.show()
+                showBottomSheetDialog(data)
             }
         })
     }
+
+    private fun navigateToDetailFragment(data: Product) {
+        val fragment = DetailFragment()
+        fragment.arguments = Bundle().apply { putParcelable("products", data) }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.flFragment, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun showBottomSheetDialog(data: Product) {
+        val dialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.archive_bottom_sheet, null)
+        dialog.setCancelable(true)
+        dialog.setContentView(view)
+
+        setupDeleteAction(dialog, data)
+        setupRestoreAction(dialog, data)
+
+        dialog.show()
+    }
+
+    private fun setupDeleteAction(dialog: BottomSheetDialog, data: Product) {
+        val deleteTextView = dialog.findViewById<TextView>(R.id.delete)
+        deleteTextView?.setOnClickListener {
+            showDeleteConfirmationDialog(data, dialog)
+        }
+    }
+
+    private fun showDeleteConfirmationDialog(data: Product, dialog: BottomSheetDialog) {
+        val startDialogFragment = AlertDialog.Builder(requireContext())
+            .setTitle("Удалить из архива?")
+            .setPositiveButton("Yes") { _, _ ->
+                presenter.deleteProduct(data)
+                dialog.dismiss()
+            }
+            .setNegativeButton("No"){ _, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        startDialogFragment.show()
+    }
+
+    private fun setupRestoreAction(dialog: BottomSheetDialog, data: Product) {
+        val restoreTextView = dialog.findViewById<TextView>(R.id.restore)
+        restoreTextView?.setOnClickListener {
+            showRestoreConfirmationDialog(data, dialog)
+        }
+    }
+
+    private fun showRestoreConfirmationDialog(data: Product, dialog: BottomSheetDialog) {
+        val startDialogFragment = AlertDialog.Builder(requireContext())
+            .setTitle("Восстановить из архива?")
+            .setPositiveButton("Yes") { _, _ ->
+                restoreProduct(data)
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { _, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        startDialogFragment.show()
+    }
+
     override fun onResume() {
         super.onResume()
         presenter.getAllArchived()
-    }
-
-    override fun showAllProducts(products: List<Product>) {
     }
 
     fun restoreProduct(product: Product){
@@ -111,5 +129,8 @@ class ArchiveFragment : Fragment(), Presenter.ArchivedView {
 
     override fun showAllArchived(products: List<Product>) {
         adapter.updateProduct(products)
+    }
+
+    override fun showAllProducts(products: List<Product>) {
     }
 }

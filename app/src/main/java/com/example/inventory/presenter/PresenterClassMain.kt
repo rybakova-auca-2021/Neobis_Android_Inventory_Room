@@ -44,6 +44,17 @@ class PresenterClassMain(context: Context) : Presenter.PresenterMain{
         }
     }
 
+    override fun searchProductsByName(name: String) {
+        val products = mutableListOf<Product>()
+        val allProducts = repository.getAllProducts()
+        for (product in allProducts) {
+            if (product.name.contains(name, ignoreCase = true)) {
+                products.add(product)
+            }
+        }
+        view?.showAllProducts(products)
+    }
+
     override fun attachView(view: Presenter.ProductView) {
         this.view = view
     }

@@ -19,6 +19,7 @@ interface Presenter {
         fun updateProduct(product: Product)
         fun attachView(view: ProductView)
         fun detachView()
+        fun searchProductsByName(name: String)
     }
 
     interface PresenterArchive {

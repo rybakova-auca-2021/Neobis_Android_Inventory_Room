@@ -4,10 +4,12 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -35,7 +37,8 @@ class AddProductFragment : Fragment(), Presenter.ProductView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        init()
+        presenter = PresenterClassMain(requireContext())
+        presenter.attachView(this)
         binding.backButton.setOnClickListener {
             val fragment = MainFragment()
             parentFragmentManager.beginTransaction()
@@ -55,28 +58,18 @@ class AddProductFragment : Fragment(), Presenter.ProductView {
         }
         insertProduct()
     }
-    private fun init() {
-        presenter = PresenterClassMain(requireContext())
-        presenter.attachView(this)
-    }
 
     private fun insertProduct() {
         binding.buttonAdd.setOnClickListener {
-            if (binding.name.text.isNotEmpty() && binding.price.text.isNotEmpty() &&
-                binding.manufacturer.text.isNotEmpty() && binding.quantity.text.isNotEmpty()
-            ) {
-                val image = selectedImageUri.toString()
-                val name = binding.inputName.text.toString()
-                val price = binding.inputPrice.text.toString()
-                val manufacturer = binding.inputManufacturer.text.toString()
-                val quantity = binding.inputQuantity.text.toString()
-                val product = Product(0, image, name, price, manufacturer, quantity, 0)
-                presenter.addProduct(product)
-                Toast.makeText(requireContext(), "Product is added", Toast.LENGTH_SHORT).show()
-                requireActivity().supportFragmentManager.popBackStack()
-            } else {
-                Toast.makeText(requireContext(), "Invalid input", Toast.LENGTH_SHORT).show()
-            }
+            val image = selectedImageUri.toString()
+            val name = binding.inputName.text.toString()
+            val price = binding.inputPrice.text.toString()
+            val manufacturer = binding.inputManufacturer.text.toString()
+            val quantity = binding.inputQuantity.text.toString()
+            val product = Product(null, image, name, price, manufacturer, quantity, 0)
+            presenter.addProduct(product)
+            Toast.makeText(requireContext(), "Product is added", Toast.LENGTH_SHORT).show()
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
