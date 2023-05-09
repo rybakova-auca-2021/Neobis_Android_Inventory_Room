@@ -99,6 +99,9 @@
             android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             tools:ignore="SpeakableTextPresentCheck" />
     </androidx.cardview.widget.CardView>
 
@@ -137,6 +140,9 @@
             android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
+            android:maxLines="1"
+            android:inputType="number"
+            android:imeOptions="actionNext"
             tools:ignore="SpeakableTextPresentCheck" />
     </androidx.cardview.widget.CardView>
 
@@ -175,6 +181,9 @@
             android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionNext"
             tools:ignore="SpeakableTextPresentCheck" />
     </androidx.cardview.widget.CardView>
 
@@ -213,6 +222,9 @@
             android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:background="@android:color/transparent"
+            android:maxLines="1"
+            android:inputType="number"
+            android:imeOptions="actionDone"
             tools:ignore="SpeakableTextPresentCheck" />
     </androidx.cardview.widget.CardView>
 

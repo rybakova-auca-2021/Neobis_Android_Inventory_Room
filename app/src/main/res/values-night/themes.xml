@@ -1,7 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Inventory" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Inventory" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="android:alertDialogTheme">@style/LightDialogTheme</item>
+        <item name="alertDialogTheme">@style/LightDialogTheme</item>
+    </style>
+
+    <style name="LightDialogTheme" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/bottomSheetBackground</item>
+    </style>
+
+    <style name="bottomSheetBackground" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_top_corners</item>
     </style>
 </resources>

@@ -64,7 +64,7 @@ class ArchiveFragment : Fragment(), Presenter.ArchivedView {
     }
 
     private fun showBottomSheetDialog(data: Product) {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogStyle)
         val view = layoutInflater.inflate(R.layout.archive_bottom_sheet, null)
         dialog.setCancelable(true)
         dialog.setContentView(view)
@@ -84,12 +84,12 @@ class ArchiveFragment : Fragment(), Presenter.ArchivedView {
 
     private fun showDeleteConfirmationDialog(data: Product, dialog: BottomSheetDialog) {
         val startDialogFragment = AlertDialog.Builder(requireContext())
-            .setTitle("Удалить из архива?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle("Удалить ${data.name} из архива?")
+            .setPositiveButton("Да") { _, _ ->
                 presenter.deleteProduct(data)
                 dialog.dismiss()
             }
-            .setNegativeButton("No"){ _, _ ->
+            .setNegativeButton("Нет"){ _, _ ->
                 dialog.dismiss()
             }
             .create()
@@ -105,12 +105,12 @@ class ArchiveFragment : Fragment(), Presenter.ArchivedView {
 
     private fun showRestoreConfirmationDialog(data: Product, dialog: BottomSheetDialog) {
         val startDialogFragment = AlertDialog.Builder(requireContext())
-            .setTitle("Восстановить из архива?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle("Восстановить ${data.name} из архива?")
+            .setPositiveButton("Да") { _, _ ->
                 restoreProduct(data)
                 dialog.dismiss()
             }
-            .setNegativeButton("No") { _, _ ->
+            .setNegativeButton("Нет") { _, _ ->
                 dialog.dismiss()
             }
             .create()

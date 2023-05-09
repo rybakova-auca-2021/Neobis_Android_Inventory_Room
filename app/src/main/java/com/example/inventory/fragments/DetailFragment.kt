@@ -130,12 +130,12 @@ class DetailFragment : Fragment(), Presenter.ProductView {
             val dialog = AlertDialog.Builder(requireContext(), R.style.LightDialogTheme)
             dialog.apply {
                 setTitle("Сохранить изменения?")
-                setPositiveButton("Yes") { _, _ ->
+                setPositiveButton("Сохранить") { _, _ ->
                     product.id?.let { it1 -> editProduct(it1) }
                     Toast.makeText(requireActivity(), "Изменения сохранены!", Toast.LENGTH_SHORT)
                         .show()
                 }
-                setNegativeButton("No") { _, _ ->
+                setNegativeButton("Отмена") { _, _ ->
                     Toast.makeText(requireActivity(), "Отменено", Toast.LENGTH_SHORT).show()
                 }
             }.create()

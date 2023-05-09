@@ -74,7 +74,7 @@ class MainFragment : Fragment(), Presenter.ProductView {
     }
 
     private fun createBottomSheetDialog(): BottomSheetDialog {
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogStyle)
         val view = layoutInflater.inflate(R.layout.main_bottom_sheet, null)
         dialog.setCancelable(true)
         dialog.setContentView(view)
@@ -83,11 +83,11 @@ class MainFragment : Fragment(), Presenter.ProductView {
 
     private fun showArchiveConfirmationDialog(data: Product) {
         AlertDialog.Builder(requireContext(), R.style.LightDialogTheme)
-            .setTitle("Архивировать из каталога?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle("Архивировать ${data.name} из каталога?")
+            .setPositiveButton("Да") { _, _ ->
                 archiveProduct(data)
             }
-            .setNegativeButton("No", null)
+            .setNegativeButton("Нет", null)
             .create()
             .show()
     }
